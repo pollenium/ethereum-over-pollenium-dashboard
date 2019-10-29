@@ -9,9 +9,7 @@ const client = new pollenium.Client({
   WebSocket: WebSocket,
   hashcashWorkerUrl: './lib/pollenium-anemone/hashcash-worker.js'
 })
-const applicationId = pollenium.Bytes.fromUtf8('pollenboard').getPaddedLeft(32)
-
-console.log(client)
+const applicationId = pollenium.Bytes.fromUtf8('eth.tx.0').getPaddedLeft(32)
 
 const app = angular.module('app', ['yaru22.angular-timeago'])
 
@@ -43,44 +41,13 @@ class SignalingClientComponent {
   }
 }
 
-class MissiveComponent {
-  constructor($scope, body, isUsers) {
+class TransactionComponent {
+  constructor($scope, rawTransaction) {
     this.$scope = $scope
-    this.body = body
-    this.bodyUtf8 = body.getUtf8()
-    this.isUsers = isUsers
-    this.powProgress = .01
-  }
-  setPowProgress(powProgress) {
-    this.powProgress = powProgress
-    setTimeout(() => {
-      this.$scope.$apply()
-    })
-  }
-  increasePowProgress() {
-    if (this.powProgress >= .9) {
-      return
-    }
-    this.setPowProgress(this.powProgress + ((1 - this.powProgress) / 4))
-  }
-  async broadcast() {
-    this.setPowProgress(.1)
-    this.powProgressInterval = setInterval(() => {
-      this.increasePowProgress()
-    }, 1000)
-
-    const missiveGenerator = new pollenium.MissiveGenerator(
-      client,
-      applicationId,
-      this.body,
-      8
-    )
-    const missive = await missiveGenerator.fetchMissive()
-    missive.broadcast()
-    this.isBroadcast = true
-    this.broadcastAt = new Date
-    clearInterval(this.powProgressInterval)
-    this.$scope.$apply()
+    this.rawTransactionHex = rawTransaction.getHex()
+    this.transaction = new ethereumjsTx.Transaction(this.rawTransactionHex)
+    this.transactionHash = this.transaction.hash()
+    this.transactionSerialized = this.transaction.serialize()
   }
 }
 
@@ -160,7 +127,7 @@ app.controller('Friendships', async function SignalingServersController($scope) 
 
 })
 
-app.controller('Missives', ($scope) => {
+app.controller('Transactions', ($scope) => {
   function setIsConnected() {
     $scope.isConnected = getFriends().filter((friendship) => {
       return friendship.status === 2
@@ -171,28 +138,15 @@ app.controller('Missives', ($scope) => {
   client.on('friendship', setIsConnected)
   client.on('friendship.status', setIsConnected)
 
-  $scope.missiveComponents = []
-
-  $scope.post = () => {
-    const missiveComponent = new MissiveComponent(
-      $scope,
-      pollenium.Bytes.fromUtf8($scope.missiveBodyUtf8),
-      true
-    )
-    $scope.missiveComponents.push(missiveComponent)
-    $scope.missiveBodyUtf8 = ''
-    setTimeout(() => {
-      missiveComponent.broadcast()
-    })
-  }
+  $scope.transactionComponents = []
 
   client.on('friendship.missive', (missive) => {
     if (!missive.applicationId.equals(applicationId)) {
       return
     }
-    const missiveComponent = new MissiveComponent($scope, missive.applicationData, false)
-    missiveComponent.receivedAt = new Date
-    $scope.missiveComponents.push(missiveComponent)
+    const transactionComponent = new TransactionComponent($scope, missive.applicationData)
+    transactionComponent.receivedAt = new Date
+    $scope.transactionComponents.push(transactionComponent)
     $scope.$apply()
   })
 })
@@ -200,5 +154,15 @@ app.controller('Missives', ($scope) => {
 app.filter('reverse', function() {
   return function(items) {
     return items.slice().reverse();
+  }
+})
+
+app.filter('hex', function() {
+  return function(uint8Array) {
+    if (!uint8Array) {
+      return '0x'
+    }
+    const bytes = new pollenium.Bytes(uint8Array)
+    return `0x${bytes.getHex()}`
   }
 })

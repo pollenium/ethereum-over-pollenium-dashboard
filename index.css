@@ -21,12 +21,23 @@
   margin-right: 5px;
 }
 
-.progress {
-  height: 4px;
-  margin-top: 5px;
-  max-width: 200px;
+.transaction-table {
+  table-layout: fixed;
+  max-width: 100%;
 }
 
-.message {
-  padding-bottom: 10px;
+.transaction-table td:first-child {
+  width: 120px;
+}
+
+.transaction code {
+  color: inherit;
+}
+
+.transaction pre {
+  white-space: pre-wrap;
+}
+
+.transaction {
+  margin-bottom: 5px;
 }
