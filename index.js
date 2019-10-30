@@ -49,6 +49,9 @@ class TransactionComponent {
     console.log(this.transaction)
     this.transactionHash = this.transaction.hash()
     this.transactionSerialized = this.transaction.serialize()
+
+    const transactionHashBytes = new pollenium.Bytes(this.transactionHash)
+    this.linkUrl = `https://etherscan.io/tx/0x${transactionHashBytes.getHex()}`
   }
 }
 
