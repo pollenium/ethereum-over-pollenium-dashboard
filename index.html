@@ -69,71 +69,73 @@
           <div ng-show="isConnected">
             <div class="alert alert-info" ng-show="transactionComponents.length === 0">
               <div class="spinner-grow spinner-grow-sm text-info" role="status"></div>
-              Listening for Ethereum transactions
+              Listening for Ethereum transactions. This may take a minute.
             </div>
-            <div ng-show="transactionComponents.length > 0" class="alert alert-success">
-              So far you've relayed {{transactionComponents.length - $index}} Ethereum transactions.
-            </div>
-            <h5>Transactions</h5>
-            <hr>
-            <div class="transactions">
-              <div class="transaction card" ng-repeat="transactionComponent in transactionComponents | reverse">
-                <div class="card-body">
-                  <h5 class="card-title">Transaction {{transactionComponents.length - $index}}</h5>
-                  <table class="table transaction-table">
-                    <tr>
-                      <td>Hash</td>
-                      <td><code>{{transactionComponent.transactionHash | hex}}</code></td>
-                    </tr>
-                    <tr>
-                      <td>From</td>
-                      <td><code>{{transactionComponent.transaction.from | hex}}</code></td>
-                    </tr>
-                    <tr>
-                      <td>To</td>
-                      <td><code>{{transactionComponent.transaction.to | hex}}</code></td>
-                    </tr>
-                    <tr>
-                      <td>Value</td>
-                      <td><code>{{transactionComponent.transaction.value | hex}}</code></td>
-                    </tr>
-                    <tr>
-                      <td>Nonce</td>
-                      <td><code>{{transactionComponent.transaction.nonce | hex}}</code></td>
-                    </tr>
-                    <tr>
-                      <td>Data</td>
-                      <td><pre>{{transactionComponent.transaction.data | hex}}</pre></td>
-                    </tr>
-                    <tr>
-                      <td>R</td>
-                      <td><pre>{{transactionComponent.transaction.r | hex}}</pre></td>
-                    </tr>
-                    <tr>
-                      <td>S</td>
-                      <td><pre>{{transactionComponent.transaction.s | hex}}</pre></td>
-                    </tr>
-                    <tr>
-                      <td>V</td>
-                      <td><pre>{{transactionComponent.transaction.v | hex}}</pre></td>
-                    </tr>
-                    <tr>
-                      <td>Serialized</td>
-                      <td><pre>{{transactionComponent.transactionSerialized | hex}}</pre></td>
-                    </tr>
-                  </table>
-                  <small class="text-muted">
-                    <span>
-                      Received {{transactionComponent.receivedAt | timeAgo}}
-                    </span>
-                  </small>
-                </div>
+            <div ng-show="transactionComponents.length > 0">
+              <div class="alert alert-success">
+                So far you've relayed {{transactionComponents.length - $index}} Ethereum transactions.
+              </div>
+                <h5>Transactions</h5>
+                <hr>
+                <div class="transactions">
+                  <div class="transaction card" ng-repeat="transactionComponent in transactionComponents | reverse">
+                    <div class="card-body">
+                      <h5 class="card-title">Transaction {{transactionComponents.length - $index}}</h5>
+                      <table class="table transaction-table">
+                        <tr>
+                          <td>Hash</td>
+                          <td><code>{{transactionComponent.transactionHash | hex}}</code></td>
+                        </tr>
+                        <tr>
+                          <td>From</td>
+                          <td><code>{{transactionComponent.transaction.from | hex}}</code></td>
+                        </tr>
+                        <tr>
+                          <td>To</td>
+                          <td><code>{{transactionComponent.transaction.to | hex}}</code></td>
+                        </tr>
+                        <tr>
+                          <td>Value</td>
+                          <td><code>{{transactionComponent.transaction.value | hex}}</code></td>
+                        </tr>
+                        <tr>
+                          <td>Nonce</td>
+                          <td><code>{{transactionComponent.transaction.nonce | hex}}</code></td>
+                        </tr>
+                        <tr>
+                          <td>Data</td>
+                          <td><pre>{{transactionComponent.transaction.data | hex}}</pre></td>
+                        </tr>
+                        <tr>
+                          <td>R</td>
+                          <td><pre>{{transactionComponent.transaction.r | hex}}</pre></td>
+                        </tr>
+                        <tr>
+                          <td>S</td>
+                          <td><pre>{{transactionComponent.transaction.s | hex}}</pre></td>
+                        </tr>
+                        <tr>
+                          <td>V</td>
+                          <td><pre>{{transactionComponent.transaction.v | hex}}</pre></td>
+                        </tr>
+                        <tr>
+                          <td>Serialized</td>
+                          <td><pre>{{transactionComponent.transactionSerialized | hex}}</pre></td>
+                        </tr>
+                      </table>
+                      <small class="text-muted">
+                        <span>
+                          Received {{transactionComponent.receivedAt | timeAgo}}
+                        </span>
+                      </small>
+                    </div>
 
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-          </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.js" integrity="sha256-pVreZ67fRaATygHF6T+gQtF1NI700W9kzeAivu6au9U=" crossorigin="anonymous"></script>
