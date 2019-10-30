@@ -46,6 +46,7 @@ class TransactionComponent {
     this.$scope = $scope
     this.rawTransactionHex = rawTransaction.getHex()
     this.transaction = new ethereumjsTx.Transaction(this.rawTransactionHex)
+    console.log(this.transaction)
     this.transactionHash = this.transaction.hash()
     this.transactionSerialized = this.transaction.serialize()
   }
@@ -141,6 +142,7 @@ app.controller('Transactions', ($scope) => {
   $scope.transactionComponents = []
 
   client.on('friendship.missive', (missive) => {
+    console.log(missive.applicationId.getUtf8())
     if (!missive.applicationId.equals(applicationId)) {
       return
     }
@@ -164,5 +166,15 @@ app.filter('hex', function() {
     }
     const bytes = new pollenium.Bytes(uint8Array)
     return `0x${bytes.getHex()}`
+  }
+})
+
+app.filter('number', function() {
+  return function(uint8Array) {
+    if (!uint8Array) {
+      return '0'
+    }
+    const bytes = new pollenium.Bytes(uint8Array)
+    return bytes.getBn().toString()
   }
 })
